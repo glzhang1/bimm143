@@ -1,0 +1,65 @@
+---
+title: "Class11: Structural Bioinformatics 1"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Section 1. The PDB
+
+Determine the percentage of structures solved by X-Ray and Electron Microscopy. 
+```{r}
+stats <- read.csv("Data Export Summary.csv", row.names =1)
+stats
+```
+
+
+```{r}
+stats$Total
+```
+```{r}
+precent.by.method <- stats$Total/sum(stats$Total)*100
+names(precent.by.method) <- rownames(stats)
+precent.by.method
+```
+
+```{r}
+sum(stats$Proteins)/ sum(stats$Total)*100
+```
+
+##Section 3. Introduction to Bio3D in R
+ First we have to lad the package we want to use
+```{r}
+library(bio3d)
+```
+ 
+```{r}
+pdb <- read.pdb("1hsg")
+pdb
+```
+
+```{r}
+aa321(pdb$atom$resid)
+```
+
+Select protein
+```{r}
+prot.inds <- atom.select(pdb,"protein")
+prot.inds
+
+```
+
+
+```{r}
+prot.pdb <- trim.pdb(pdb,prot.inds)
+write.pdb(prot.pdb, file="protin.pdb")
+```
+
+lets do the same thing for our drug
+```{r}
+lig.inds <- atom.select(pdb,"ligand")
+lig.pdb <- trim.pdb(pdb,lig.inds)
+write.pdb(lig.pdb, file="ligand.pdb")
+```
